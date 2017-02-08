@@ -1,0 +1,52 @@
+# .................Series de Tiempo 08.02.2017.................................
+#..............................................................................
+# En esta clase vamos a proponer la poblacion en Mexico, que el valor minimo 
+#Seran 100, max 120, 15 datos que inicie en 2000, el replace es para
+# declarar el remplaso, si es falso, no repetira los mismos datos.
+#Se genero un vector simulando una serie de tiempo
+pob<- sample(100:120,15,replace=F)
+pob
+
+#¿Como R sabe que es una serie de tiempo y no un vector?
+ pobs<- ts(pob,frequency = 1,start = (2000))
+ pobs
+ #Frecuency =1 porque es anual, start: donde comienza, y ts es la funcion para que
+ #reconosca cuando es una serie de tiempo.
+ 
+ end(pobs) # Donde termina la serie.
+ start(pobs) # Donde inicia
+ plot(pobs) # Graficar una serie de tiempo.
+ plot(aggregate(pobs))
+ 
+ help(aggregate)
+ #Aggregate :Divide los datos en subconjuntos, calcula las estadísticas de resumen para cada uno y devuelve el resultado en una forma conveniente.
+ 
+ #Para importar el archivo que tenemos en el escritorio
+ 
+ # Primera Forma
+infor<- ts((read.csv("C:\\Users\\Sala-D16\\Desktop\\indicador.csv")), frequency = 4,start = (2005))
+
+# Segunda Forma
+intento<- read.csv("C:\\Users\\Sala-D16\\Desktop\\indicador.csv")
+intts<- ts(intento, frequency = 4,start = (2005)) 
+
+########################################E J E R C I C I O################################################## 
+#..........................................................................................................
+# Crear una serie de Tiempo en un mismo excel  
+
+Ef<- read.csv("C:\\Users\\Sala-D16\\Desktop\\ejercicio1.csv")
+Efts<- ts(Ef,frequency = 4,start = (2005)) # Esta no se que significa mts
+descop<- ts(Ef[,1],start = 2005,frequency = 4, end=2014) # Cuando vemos corchetes (matriz) primera entrada filas segunda columnas,
+# si no tiene nada en la primera entrada es que no quieres que tome encuenta la fila o vic.
+
+#Realizaremos las sigueintes tres series de tiempo:
+
+View(Ef)
+
+parcial<- ts(Ef[,2],start = 2005,frequency = 4, end=2014)
+trabajo<- ts(Ef[,3],start = 2005,frequency = 4, end=2014)
+condiciones<- ts(Ef[,4],start = 2005,frequency = 4, end=2014)
+parcial
+trabajo
+condiciones
+
