@@ -1,0 +1,29 @@
+#................... SERIES DE TIEMPO  ..............................
+# PIB tasa de crecimiento anual en Mexico de 1980 a 2015
+# Crear 4 ST
+#1980-1990
+#1991-2000
+#2001-2010
+#2011-2015
+# Graficar en una misma imagen ST 2-3
+# Graficas en una misma imagen ST 1-4
+ arc<- read.csv("C:\\Users\\Sala-D15\\Desktop\\PIBMEX.csv")
+ View(arc)
+ 
+ #-------> Crear series
+ 
+ st1<-arc[21:31,]
+ st2<-arc[32:42,]
+ st3<-arc[43:53,]
+ st4<-arc[63:73,]
+#------> Creando ts
+ st1ts<-ts(st1,frequency = 1,start = (1980))
+ st2ts<-ts(st2,frequency = 1,start = (1980))
+ st3ts<-ts(st3,frequency = 1,start = (1980))
+ st4ts<-ts(st4,frequency = 1,start = (1980))
+ #-----> GRAFICAR
+ 
+
+ plot(cbind(st2ts,st3ts))
+ plot(cbind(st1ts,st4ts))
+ 
