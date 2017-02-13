@@ -1,0 +1,93 @@
+# ...........................Series de tiempo................................
+#............................13.02.2017.....................................
+ 
+obj1<- sample(5:8,60,replace=TRUE)
+obj1
+obj2<- sample(3:9,60, replace=TRUE)
+obj2
+obj3<-sample(0:10,60,replace = TRUE)
+obj3
+obj4<- sample(1:20,60,replace = TRUE)
+obj4
+#    ------------> Definimos la matriz con un data frame
+max<-data.frame(obj1,obj2,obj3,obj4)
+View(max)
+#   -------------> Mostrar en la consola los primeros y ultimos 12 datos.
+
+olo<-max[1:12,] # Renglon Columna---> me esta generando los primeros 12 renglones
+max[49,60,]
+# Convertir los objetos en series de tiempo 
+
+obj1st<- ts(obj1,frequency = 12,start = (2010))
+obj2st<- ts(obj2,frequency = 12,start = (2010))
+obj3st<- ts(obj3,frequency = 12,start = (2010))
+obj4st<- ts(obj4,frequency = 12,start = (2010))
+
+end(obj1st)
+
+# .....................G R A F I C A R..............................................
+#...................................................................................
+
+plot(obj1st) #----> Graficamos una sola serie de tiempo
+plot(cbind(obj1st,obj2st)) #-----> Graficamos dos series de tiempo ( combinar cbind)
+
+# Graficar otra serie
+plot(cbind(obj4st,obj2st))
+plot(cbind(obj4st,obj1st))
+plot(cbind(obj4st,obj3st))
+plot(cbind(obj1st,obj2st))
+plot.ts(maxts)
+plot.ts(maxts[,c(1,3)])  # Graficar solo ciertas graficas.
+
+# Graficar todas juntas
+maxts<-data.frame(obj1st,obj2st,obj3st,obj4st)
+plot(maxts)
+
+seriemultiple<- ts.intersect(obj1st,obj2st,obj3st,obj4st) # serie de tiempo multiple con 4 variables
+#Graficar serie de tiempo
+download.file(ggplot2)
+library("ggplot2") # Buscar como se instalan
+library("manipulate")# Buscar como se instalan
+plot(seriemultiple,main="Serie de tiempo Multiple",xlab="Años",ylab="Numero de personas",col="blue",type="l",pch=47,axes =TRUE,ann=TRUE)
+ help(plot)
+ start(seriemultiple)
+ end(seriemultiple)
+ 
+ seriemultiple02<- window(seriemultiple,start=c(2010,1),end=c(2014,1))
+ seriemultiple03<- window(seriemultiple,start=c(2012,1),end=c(2013,1))
+ 
+plot(seriemultiple02,main="Serie Multiple",xlab="Años",ylab="Numero de Personas", col="pink")
+plot(seriemultiple03,main="Serie Multiple",xlab="Años",ylab="Numero de Personas", col="green")
+
+start(seriemultiple); end(seriemultiple)
+
+#..............................EJERCICIO...................................................................
+#..........................................................................................................
+# 1. Obtener 4 series de tiempo cada quien elige con minimo de 30 datos
+# 2. Las series de tiempo que imparten tienen que tener sustento para compararlas
+# .....a) Serie1, b) serie2 , c)Serie3, d) Serie4
+#3. Importarlas, declararlas series de tiempo, graficarlas juntas, como series de tiempo cada una
+# 4. Crear serie de tiempo multiple... y graficarlas con formato... 
+# 5. Despues dividir estas series de tiempo en 3 periodos con intervalos iguales, ie , si tienen 30 datos
+# Generar 3 st con 10 años cada una
+#...........................................................................................................
+#...........................................................................................................
+
+tabla<-read.csv("C:\\Users\\Sala-D16\\Desktop\\tasasmort.csv")
+View(tabla)
+tab1<- ts(tabla[,2],start = 2000,frequency = 1, end=2014)
+tab2<- ts(tabla[,3],start = 2000,frequency = 1, end=2014)
+tab3<- ts(tabla[,4],start = 2000,frequency = 1, end=2014)
+tab4<- ts(tabla[,5],start = 2000,frequency = 1, end=2014)
+
+smul<- ts.intersect(tab1,tab2,tab3,tab4)
+
+Graf<-plot(smul,main="Tasas de Mortlaidad México",xlab="Años",ylab="Tasa de Mortalidad",col="yellow",type="b",pch=47,axes =TRUE,ann=TRUE)
+hist<-hist(smul)
+plot(density(smul))
+
+smul1<-window(smul,start=c(2012,1),end=c(2013,1))
+smul2<-window(smul,start=c(2000,1),end=c(2010,1))
+
+graftwo<-plot(smul1,main="Tasa de Mortalidad",xlab="Años",ylab="Tasa de Mortalidad", col="blue")
+
