@@ -1,0 +1,16 @@
+temporal <- tempfile()
+download.file ("http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/regulares/enoe/microdatos/enoe_15ymas/2016/2016trim1_dbf.zip",temporal)
+files = unzip(temporal, list=TRUE)$Name
+unzip(temporal, files=files[grepl("dbf",files)])
+install.packages("foreign")
+require (foreign)
+SDEMT116<-data.frame(read.dbf("sdemt116.dbf"))
+
+# Ejercicio: Descargar base de ENH (solo encontre 2014)
+c <- tempfile()
+download.file ("http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/regulares/enh/2014/microdatos/viviendas_enh_2014_dbf.zip",c)
+files = unzip(temporal, list=TRUE)$Name
+unzip(temporal, files=files[grepl("dbf",files)])
+install.packages("foreign")
+require (foreign)
+ENH14<-data.frame(read.dbf("viviendas_enh_2014_dbf.dbf"))
