@@ -1,0 +1,10 @@
+# ...............................Series de Tiempo .................................
+# ....................Tarea : Leer paginas de internet en R.......................
+
+source("http://bit.ly/LoQlcW")
+#processing
+link <- "https://boglab.plp.iastate.edu/talen/e0a524b426adc8681008ec99ac718aac3c7e6ecb"
+prueba<- getData(link)
+class(prueba)
+names(prueba)
+prueba
