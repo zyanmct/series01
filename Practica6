@@ -1,0 +1,51 @@
+################ 17/02/17
+###para descomponer una ST gráficamente se utiliza una función que se llama descompose, por
+###lo que primero es importante reconocer la serie de tiempo
+##y después aplicar la función gráficamente
+desoc <- sample (3:8, 44, replace=T)
+tdesoc <- ts (desoc, frequency = 4, start = 2005)
+plot(decompose(tdesoc))
+x11()
+plot(decompose(tdesoc)) ### trend es tendencia, observed son los datos observados
+###la funcion esta compuesta por los 3 elementos por separado que son estacionaridad, tendencia y aleatoriedad
+x11()
+plot(tdesoc)
+tiie <- read.csv("C:\\Users\\Sala-D16\\Documents\\practica 1702\\TIIE2015.csv")
+sttiie <- ts(tiie, frequency= 52, start = 2005)
+x11()
+plot(sttiie)
+plot(decompose(sttiie))
+pib <- read.csv("C:\\Users\\Sala-D16\\Documents\\practica 1702\\PIB México.csv")
+stpib <- ts (pib, frequency = 4, start = 2007)
+x11()
+plot(stpib)
+x11()
+plot(decompose(stpib))
+View(stpib)### nos da nuestro vector
+summary(stpib)####solo nos da el resumen
+names(stpib)
+names(tspib$trend)
+depibst <- decompose(stpib)
+names(depibst)###names es para saber que objetos tiene la función 
+depibst$trend###muestra los elementos de cada obj de la función
+depibst$seasonal
+depibst$random
+###descomponer la serie de tiempo de lourdes
+###trimestral empieza en 2005 es la tasa de desocupación
+lul <- read.csv("C:\\Users\\Sala-D16\\Documents\\practica 1702\\Tarea2.csv")
+stlul <- ts(lul, frequency= 4, start = 2005)
+x11()
+plot(stlul)
+x11()
+desstlul <- decompose(stlul)
+plot(decompose(stlul))
+###### 
+names(decompose(stlul))
+desstlul$seasonal
+desstlul$trend
+desstlul$seasonal
+###  la tendencia sube y baja bastente por lo que dependiendo de los meses  es la tasa de desempleo
+# Entre el 2010 y el 20012 la tendencia se normalizo un poco y auque siguió bajando y subiendo su tendencia fue mucho menos pronunciada
+##  estacionalidad: la estacionalidad se mantiene por lo que dependiendo de determinados meses o periodos repetidos
+###las tasas de desempleo baja o suben de forma no muy clara a excepción del 2009 y 20010 en los cuales se muestra un comportamiento muy parecido
+#### Aleatoriedad: Es bastante aleatorio y esta parte no mantiene un patrón por lo que 
