@@ -1,0 +1,20 @@
+
+###### grafica tendencia
+desocupacion<-read.csv(file.choose())
+tsdes<-ts(desocupacion, frequency=4,start=2007)
+detdes<- decompose(tsdes)
+detdes$trend
+detdes$seasonal
+plot(tsdes,col="blue",
+     main="tasa de desocupacion trimestral",
+     ylab="tasas", xlab="años")
+lines(detdes$trend,col="red", ylab="tendencia")
+
+### estacionariedad
+monthplot(detdes$seasonal, main="IVEc", ylab="ive trimestral")  ###grafica estaciomariedad
+
+## tarea
+ ### 1) encontrar una st con tendencia a la alza y
+###la estacionridad tambuen incremente
+#### 2) aplicar el moelo multiplicativo y aditivo
+####3) graficar tendencia
