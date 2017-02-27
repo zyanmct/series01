@@ -1,0 +1,57 @@
+# Tarea ............Series de tiempo
+##--> Libreria ggplot2
+install.packages("tidyverse")
+#Nota: Se tarda un poco es una libreria pesada
+# Otras maneras:
+install.packages("ggplot2")
+install.packages("devtools")
+devtools::install_github("tidyverse/ggplot2")
+
+ggplot(orots, aes(displ, hwy, colour = class)) 
+
+#qplot(x, y, data=orots, color=green, shape=, size=, alpha=, 
+    
+
+library(ggplot2)
+
+##############################################################################
+ oro<- read.csv("/Users/zyanmctz/Desktop/precioOro.csv")
+ View(oro)
+ orots<-ts(oro, frequency=12,start=2016)
+ orots1<- decompose(orots)
+ orots1$trend
+ orots1$seasonal
+ plot(orots,col="green", main="Precios Historicos Oro 2016-2017",
+      ylab="tasas", xlab="año")
+ lines(orots1$trend,col="pink", ylab="tendencia")
+ ############################################################################
+ #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ #.........................METODO MULTIPLICATIVO............................
+ #---> Descomponer la serie   
+ gold<-decompose(orots,type = "multiplicative")
+ plot(gold)
+ #---> Grafica y Tendencia
+ gold$seasonal
+ plot(gold$seasonal,main="Precio Oro")
+ monthplot(gold$seasonal,main="Precios Historicos del Oro",ylab = " Mensual")
+ 
+ plot(oro,col="blue",main = "Oro",ylab = "Precio",xlab = "Cierre")
+ lines(orots$trend,col="green",ylab="historico")
+ 
+ help(decompose)
+ #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ #............................METODO ADITIVO.................................
+ #---> Descomponer la serie   
+ goldw<-decompose(orots,type = "additive")
+ plot(goldw)
+ #---> Grafica y Tendencia
+ goldw$seasonal
+ plot(goldw$seasonal,main="Precio Oro")
+ monthplot(goldw$seasonal,main="Precios Historicos del Oro",ylab = " Mensual")
+ 
+ plot(orots,col="blue",main = "Oro",ylab = "Precio",xlab = "Cierre")
+ lines(orots$trend,col="green",ylab="historico")
+ 
+
+ 
+ 
