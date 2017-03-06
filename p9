@@ -1,0 +1,35 @@
+##########################################################
+##################### SERIES DE TIEMPO ###################
+##########################################################
+# 06.03.2017
+
+install.packages("fpp")
+require(fpp)
+plot(window(elec,start=1980), ylab = "GWh", xlab="Year", main="Australian electricity production")
+
+#-----> Estacionaliedad, tendnecia ciclico
+
+plot(bricksq, ylab = "million units", xlab="year", main = "Australian clay brick production")
+# Ver meses donde existe mas estacionalidad mensualmente
+
+seasonplot(elec,s=12, year.labels = TRUE, main = "Australianos electricos",ylab = "año",col = rainbow(20),
+           year.labels.left = TRUE,pch=15)
+bri
+#----> ESTACIONALIDAD Y CICLICO NO MUCHA TENDENCIA
+
+plot(hsales,main = "Sales of a new one-family houses, USA", ylab = "Total sales", xlab = "year")
+
+seasonplot(hsales,s=12, year.labels = TRUE, main = "Australianos electricos",ylab = "año",col = rainbow(20),
+           year.labels.left = TRUE,pch=15)
+
+dec<-decompose(bricksq)
+#----> ELIMINAMOS TENDENCIA<-------
+sinesta<-bricksq-dec$seasonal
+sintend<-bricksq-dec$trend
+plot(sinesta)
+plot(sintend)
+
+# ---------------------------> TAREA-------------------------------------
+#    *3 ejemplos graficas detectar tendencia, estacionalidad y ciclo 
+#    * Analisar a que se debe cada una de los elementos 
+#    *2000-2015 del PIB que bajamos en clase esta en la memoria
