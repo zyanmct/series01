@@ -1,0 +1,25 @@
+deso<- data.frame(read.csv("C:\\Users\\Sala-D16\\Documents\\practica 1702\\Tarea2.csv"))
+desot<- ts(deso, frequency=4, start=2005)
+plot(desot)
+lines(eeadj,col="blue")
+dectsd<- decompose(desot) # descomposicion modelo aditivo
+dectsdmul<- decompose(desot,type = "mult") # descomposicion modelo multiplicativo
+
+plot(dectsd)
+plot(dectsdmul)
+
+# ----->    desestacionalizar una serie
+#     se desestacionaliza una serie de tiempo poir diferentes razones, entre las que destacan es 
+#     para poder predecir nuestros datos con mayo presicion y sin contar con factores externos al 
+#     comportamiento con nuestros datos, dos elementos que permiten desestaciobalizar una serie
+# elimanr estacionalidad: de la ST eliminar o restar nuestro componenta estacional.
+
+
+require(fpp)
+eeadj<-seasadj(dectsd) #-----> esta es la funcion con la que eliminas estacionalidad.
+plot(eeadj)
+eeadj
+sinesta<-desot- dectsd$seasonal
+eeadj-sinesta  
+ 
+ 
