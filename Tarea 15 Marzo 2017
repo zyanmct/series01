@@ -1,0 +1,29 @@
+# -------------------------->>>>>> Series de tiempo <<<<<-----------------------------------
+# Tarea 15 de Marzo 2017
+
+#Base de datos : Liga mx puntos obtenidos y tarjetas de amonestacion totales por equipo hasta la jornada 9
+
+table<-read.csv("/Users/zyanmctz/Documents/Clausura2017mx1.csv")
+#:::::::::::::::
+summary(table)
+#::::::::::::::
+sum(table)
+cov(table)
+# ------> Puntos Totales J9
+sum(table[,1])
+mean(table[,1])
+sd(table[,1])
+var(table[,1])
+cov(table[,1])
+# ----- > Tarjetas Totales
+sum(table[,2])
+mean(table[,2])
+sd(table[,2])
+var(table[,2])
+cov(table[,2])
+# ---->  Tabla completa
+var(table)
+sum(table)
+cov(table)
+mean(table)
+sd(table)
