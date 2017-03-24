@@ -1,0 +1,21 @@
+
+# TAREA 
+# 24/03/20017
+
+
+# Serie de tiempo datos historicos de nike 
+# ruido blanco
+acciones<-read.csv("C:/Users/Sala-D15/acciones.csv")
+accion<-read.csv(file.choose())
+accionts<-ts(accion)
+
+acf(accionts)
+
+#     UDIS 
+## caminata aleatoria
+b<-read.csv("C://Users//SALA-D13//Desktop//B.csv")
+b
+bts<- ts(b[,1],frequency = 365, start = 2015)
+bts
+plot(bts)
+acf(bts)
