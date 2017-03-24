@@ -1,0 +1,95 @@
+#
+# .................................. SERIES DE TIEMPO....................................
+#    22/03/2017
+des<-read.csv("C:\\Users\\Sala-D16\\Desktop\\desocupacion.csv")
+dests<-ts(des,frequency=4, start=2005)
+pib<-read.csv("C:\\Users\\Sala-D16\\Desktop\\PIB MEXICO TASA.csv")
+pibts<-ts(pib, frequency = 4,start = 2005)
+acf(pibts)
+#     -----> TAREA
+#            * Buscar una serie de tiempo de Mexico donde con el correlograma determinen que tiene ruido
+#              blanco, otra ST donde muestre el correlograma exponga que la ST tiene caminata aleatoria
+
+#---------------------------> MODELOS LINEALES PARA PORNOSTICAR <---------------------------------------
+
+
+#      Son la aplicacion de pronosticos lienales como el ingenuo, promedio, ingenuo estacional 
+#       y el de deriva el pronostico ingenuo estaba basado en la ultima observacion que arroja 
+#       la serie de tiempo. Es decir este pronostico asume que la observacion mas importante es 
+#       la ultima.
+#      FUNCION EN R --> naive(serie,h=num pronosticos) h= numero de pronosticos que requiero
+
+install.packages("forecast")
+require(forecast)
+naive(pibts,h=4 )
+
+#---------------------------------------> METODO PROMEDIO <---------------------------------------------
+
+#     Este metodo le da el mismo eso a todos los datos u observaciones, ie, se asume con este metodo que 
+#      todas las observaciones tienen la misma importancia por lo que el pronostico es un promedio de todas
+#      las observaciones 
+
+#  FUNCION EN R----> meanf(serie, h=numero de pronosticos)
+
+plot (meanf(pibts, h=4))
+
+#---------------------------------------> INGENUO ESTACIONAL <-------------------------------------------
+
+#   Este metodo se utiliza en ST con alta estacionalidad este proceso consiste en darle el mayor peso 
+#   o la mayor ponderacion al dato del mismo periodo en el año anterior, p.ejm. trimestre 2 del 2005 es
+#   igual al trimestre 2 del 2006
+
+# FUNCION EN R----> snaive(serie, h=numero de pronosticos)
+
+snaive(pibts, h=4)
+
+##----------------------------------------SERIES DE TIEMPO----------------------------------------------
+#    24.03.2017
+#--------------------------------------> METODO DE LA DERIVA<-------------------------------------------
+# Este metodo consiste en que el pronostico puede incrementar o reducirse sobre el tiempo, dependiendo 
+# del promedio de los cambios historicos de la ST 
+# FUNCION EN R ----> rwf(serie, h=num de pronostico, drift=TRUE)
+
+rwf(dests, h=4 , drift=TRUE)
+# ----------------------EJERCICIO----------------------
+
+
+
+desocmod1<- meanf(dests,h=10)
+desocmod2<- naive(dests,h=10)
+desocmod3<-snaive(dests,h=10)
+desocmod4<-rwf(dests, h=10, drift=TRUE)
+x11()
+
+plot(desocmod1, main="Tasa de desocupacion trimestral" )
+
+lines(desocmod2$mean,col=5)
+lines(desocmod3$mean,col=6)
+lines(desocmod4$mean,col=7)
+
+
+legend("topleft",lty = 1,col = c(5,6,7,8),
+legend = c("media","ingenuu","ingenuo estacional","deriva"))
+
+names(desocmod2)
+
+#    Otra grafica....
+
+x11()
+plot(desocmod1, main="Tasa de desocupacion trimestral" )
+lines(desocmod2$fitted,col="Blue")
+lines(desocmod3$fitted,col="pink")
+lines(desocmod4$fitted,col="green")
+legend("topleft",lty = 1,col = c(5,6,7,8),
+            legend = c("media","ingenuu","ingenuo estacional","deriva"))
+
+# Con residuales
+
+x11()
+plot(desocmod1, main="Tasa de desocupacion trimestral" )
+lines(desocmod2$residuals,col="Blue")
+lines(desocmod3$residuals,col="pink")
+lines(desocmod4$residuals,col="green")
+legend("topleft",lty = 1,col = c(5,6,7,8),
+       legend = c("media","ingenuu","ingenuo estacional","deriva"))
+
