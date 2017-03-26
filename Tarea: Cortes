@@ -1,0 +1,133 @@
+# ---------------------------> Series de Tiempo <------------------------------
+# Tarea 26 03 2017
+
+#CORTES :)
+
+
+# ------>   Libreria --------------------------------------------
+
+install.packages("forecast")
+require(forecast)
+library(ggplot2)   #Graficos mas sensuales 
+
+# ------>    Base ------------------------------------------------
+
+base<-read.csv("/Users/zyanmctz/Documents/desocupacion.csv")
+basest<- ts(base, frequency = 4, start = 2005)
+####################################################################
+
+##############################################
+colors()[1:10]
+length(colors())                             # -----> Sirven para ver dif. colores que proporciona R
+grep("", colors(), value=TRUE)
+##############################################
+
+#--------------------------------------------------------------------------------------------
+#----------------------------     >>>>>>>>   REALES   <<<<<<< -------------------------------
+#--------------------------------------------------------------------------------------------
+
+plot(window(basest,start = 2005, end=2015), ylab ="T.D  ", xlab="Periodo",
+     main = "TASA DE DESOCUPACION ", col="seagreen4", type="b", pch=19)
+
+#--------------------------->        Periodo 2005-2010      <--------------------------------
+
+plot(window(basest,start = 2005, end=2010), ylab ="T.D ", xlab="Periodo", 
+     main = "TASA DE DESOCUPACION 2005-2010", col="royalblue4", type="b", pch=19)
+
+#--------------------------->      Periodo 2011-2015        <----------------------------------
+
+plot(window(basest,start = 2011, end=2015), ylab ="T.D", xlab="Periodo", 
+     main = "TASA DE DESOCUPACION 2011-2015", col="palegreen1", type="b", pch=19)
+
+#   ----------------------->     C O R T E :
+#    i) Cortes:
+
+cutbase<-base[1:24,]
+cutbase1<-base [25:44, ]
+
+cutbase
+cutbase1
+
+#    ii)     Convertimos en Serie de Tiempo con corte: 
+
+cutbst<-ts(cutbase, frequency= 4, start=2005)
+cutbst1<-ts(cutbase1, frequency = 4, start=2011)
+
+cutbst
+cutbst1
+#--------------------------------------------------------------------------------------------
+#------------------------ >>>>>>>    METODOS DE PRONOSTICOS  <<<<<<<<------------------------
+#--------------------------------------------------------------------------------------------
+
+# --------------------------> Metodo Ingenuo <--------------------
+#  i)  Corte 1 :
+
+MIbst<- naive (cutbst, h=12) 
+MIbst
+# ii)  Corte 2 :
+
+MIbst1<-naive(cutbst1,h=12)
+MIbst1
+
+# --------------------------> Metodo Promeio <--------------------
+
+MPbst<- meanf(cutbst, h=12)
+MPbst1<-meanf(cutbst1,h=12)
+
+MPbst
+MPbst1
+
+# ------------------------> Metodo Estacional <--------------------
+
+MEbst<- snaive (cutbst, h=12)
+MEbst1<-snaive(cutbst1,h=12)
+
+MEbst
+MEbst1
+# ------------------------> Metodo Deriva <------------------------
+
+MDbst<- rwf(cutbst, h=12, drift=T)
+MDbst1<-rwf(cutbst1,h=12,drift = T)
+
+MDbst
+MDbst1
+
+# -------------------- >>>>>> GRAFICAS <<<<<< ---------------------
+
+
+plot(MPbst,main= "PRONOSTICOS: TASA DE DESOCUPACION 2011-2015 TRIMESTRAL", col="grey")
+
+lines(MIbst$mean, col="green3")                            # MI= Metodo Ingenuo
+lines(MEbst$mean, col="mediumseagreen")                    # ME= Metodo Estacional
+lines(MDbst$mean, col="dodgerblue")                        # MD= Metodo Deriva
+lines(MPbst$mean, col="slateblue")                         # MP= Metodo Promedio
+lines(cutbst1,start = 2011, end=2015, col="green")         # REAL
+
+legend("topleft", lty=1, col=c("green3","mediumseagreen", "dodgerblue", "slateblue", "darkslateblue"),
+       legend=c("MI", "ME", "MD", "MP", "REAL"))
+
+# -------------------------- >>> COMPARACIONES <<<<----------------
+# BASE REAL DATOS:
+
+cutbst1  #---serie tiempo
+cutbase1 #---normal
+
+#......   Metodo Ingenuo  .....
+ 
+MI<- cutbst1- MIbst$mean 
+MI
+
+#........Metodo Deriva.......
+e<-MDbst$mean
+MD = cutbst1-e
+MD
+#..... Metodo Estacional....
+r<-MEbst$mean
+ME= cutbst1-r
+
+# Metodo Promedio
+t<-MPbst$mean
+MP=cutbst1-t
+MP
+
+
