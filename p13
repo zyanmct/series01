@@ -1,0 +1,58 @@
+#-----------------------------------------------------------------------------------------------------------
+#----------------------------------- >>> SERIES DE TIEMPO <<<-----------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+# 27 03 2017
+
+asa<-read.csv("C:\\Users\\Sala-D16\\Desktop\\asalariados.csv")
+
+# Transponemos y pones en un formato de matriz o data.frame la base de datos
+
+asa1<-t(data.frame(read.csv("C:\\Users\\Sala-D16\\Desktop\\asalariados.csv",header = T)[7, 2:49]))
+View(asa1)
+
+asat<-ts(asa1, start=2005,frequency=4)               # Convertimos en ST
+asat<-as.numeric(asat)                               #as.numeric funciona para convertir una ST en numerico
+asat<-ts(asat)                                       # con as.numeric volvemos a convertir en ST
+
+View(asat)                                           # LISTO !
+
+
+require(forecast)
+#--------------------------------------------------------------------------------------------------------
+#------------------------------->>>> SUAVIZADO EXPONENCIAL SIEMPLE <<<<<----------------------------------
+#---------------------------------------------------------------------------------------------------------
+#       i. alpha es el parametro de ajuste de nuestro modelo tiene que ir de 0 a 1
+#       ii.initial: que tipo de exponencial quieres y h: es el numero de parametros
+
+
+mod1<-ses(asat,alpha = 0.1,initial = "simple", h=8)
+mod2<-ses(asat,alpha = 0.3,initial = "simple", h=8)
+mod3<-ses(asat,alpha = 0.95,initial = "simple", h=8)
+
+x11()
+plot(mod1,ylab="ASALARIADOS", xlab = "PERIODO", main = "ASALARIADOS",type = "o" )
+lines(mod1$fitted,col="green",type="o")
+lines(mod2$fitted,col="blue",type="o")
+lines(mod3$fitted,col="orange",type="o")
+
+#-----> Los mean son los que se pronostican con diferentes parametros, se usa para datos ajustados
+
+lines(mod1$mean,col="green",type="o")
+lines(mod2$mean,col="blue",type="o")
+lines(mod3$mean,col="orange",type="o")
+
+legend("topleft",lty=1,col = c(1,"green","blue","orange"),
+       c("datos",expression(alpha==0.1),expression(alpha==0.3),
+         expression(alpha==.95)),pch=11)
+
+
+
+
+
+
+
+
+
+
+
+
