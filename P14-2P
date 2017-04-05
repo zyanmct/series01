@@ -1,0 +1,79 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------- SERIES DE TIEMPO ----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------------
+
+# 05.04.2017
+
+install.packages("foreign")
+require (foreign)
+
+temporal <- tempfile()
+download.file ("http://www.beta.inegi.org.mx/contenidos/proyectos/enchogares/regulares/enoe/microdatos/enoe_15ymas/2016/2016trim1_dbf.zip",
+               temporal)
+files = unzip(temporal, list=TRUE)$Name
+unzip(temporal, files=files[grepl("dbf",files)])
+coe216<-data.frame(read.dbf("coe2t116.dbf"))
+
+View(coe2)
+ls(coe216) # Ver las variables 
+
+#CON SEGURIDAD SOCIAL
+
+coe216$P6D<-as.numeric(as.character(coe216$P6D)) # Remplazamos la variable por una numerica
+
+
+# subset () subconjunto de la base de datos, lo veremos mas adelante 
+
+# | = ó, o losque esto o lo que lo otro 
+
+coesins<-subset(coe216,coe216$P6D==1|coe216$P6D==2|coe216$P6D==3|
+                  coe216$P6D==4|coe216$P6D==5)
+
+#Observamos que solo 68198 tienen seguridad social
+#ifelse
+
+
+
+coe216$sineg<-ifelse(coe216$P6D>=1  & coe216$P6D<=5,1,
+                     ifelse(coe216$P6D>=6 & coe216$P6D<=9,2,0))
+table(coe216$sineg)
+
+coe116<-data.frame(read.dbf("coe1t116.dbf"))
+
+coe116$P1C<-as.numeric(as.character(coe116$P1C))
+coe116$P1B<-as.numeric(as.character(coe116$P1B))
+coe116$P2_1<-as.numeric(as.character(coe116$P2_1))
+coe116$P2_2<-as.numeric(as.character(coe116$P2_2))
+coe116$P2_3<-as.numeric(as.character(coe116$P2_3))
+coe116$P2B<-as.numeric(as.character(coe116$P2B))
+coe116$P2C<-as.numeric(as.character(coe116$P2C))
+coe116$P1D<-as.numeric(as.character(coe116$P1D))
+
+coe116$deso <- ifelse (coe116$P1C == 11,1,
+                      
+                         ifelse ((coe116$P1B==2) & (coe116$P2_1==1
+                                                 | coe116$P2_2==2
+                                                 | coe116$P2_3 == 3) & 
+                                 
+                                 (coe116$P2B ==1)
+                              & (coe116$P2C !=2  | coe116$P2C!=9 ),2,
+                              ifelse((coe116$P1D ==2 | coe116$P1D==9) &
+                                     (coe116$P2_1 ==1
+                                     |coe116$P2_2==2
+                                     |coe116$P2_3 ==3 ) & (coe116$P2B ==1) & (
+                                       coe116$P2C != 2 & 
+                                         coe116$P2C != 9),3,0)))
+ls(coe116)
+table(coe116$deso)
+
+install.packages("questionr")
+require(questionr)
+wtd.table(coe116$deso,weights=coe116$FAC)
+
+
+
+
+
+
+
+
