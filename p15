@@ -1,0 +1,53 @@
+# ----------------------  SERIES DE TIEMPO ---------------------------------------
+#  07.04.2017 --------------------------------------------------------------------
+
+
+require(fpp)
+
+des<-read.csv("C:\\Users\\Sala-D16\\Desktop\\desocupacion.csv")
+des<-ts(des, frequency = 4,start = 2005)
+
+ mod1<- ses(des,alpha=0.1,initial="simple",h=8)
+ mod2<- ses(des,alpha=0.3,initial="simple",h=8)
+ mod3<- ses(des,alpha=0.9,initial="simple",h=8)
+ mod4<- ses(des,alpha=0.95,initial="simple",h=8)
+
+  
+ plot(mod1,ylab="desocupacion",xlab="periodo", main= "Desocupacion",col="palegreen3", type="o")
+ 
+ lines(fitted(mod1),col="cadetblue1",type="o")
+ lines(fitted(mod2),col="royalblue",type="o")
+ lines(fitted(mod3),col="slateblue4",type="o")
+ lines(fitted(mod4),col="midnightblue",type="o")
+ 
+ colors()[1:10]
+ length(colors())                             # -----> Sirven para ver dif. colores que proporciona R
+ grep("pink", colors(), value=TRUE)
+ 
+#-----> Obtenemos el residual o el error : 
+ 
+ aa<-des-mod1$fitted ## valores ajustados del modelo 1
+ bb<-des-mod2$fitted
+ cc<-des-mod2$fitted
+ dd<-des-mod4$fitted
+ # MAE :
+ mean(abs(aa))
+ mean(abs(bb))
+ mean(abs(cc))
+ mean(abs(dd))
+ 
+ #RMSE: 
+sqrt(mean(aa^2))
+sqrt(mean(bb^2))
+sqrt(mean(cc^2))
+sqrt(mean(dd^2))
+
+evalm1<-accuracy(mod1)
+evalm2<-accuracy(mod2)
+evalm3<-accuracy(mod3)
+evalm4<-accuracy(mod4)
+
+evalm1
+evalm2
+evalm3
+evalm4
