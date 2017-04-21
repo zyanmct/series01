@@ -1,0 +1,109 @@
+#                       SERIES DE TIEMPO             
+# Date: 17 Abril 2017
+# ------>EXAMEN (al cual no asisti)
+# EJERCICIO : 
+#           Bajar acciones de Netflix diario precio de cierre 2016
+#          ajustar 4 modelos de suavizado exponencial simple (alpha= 0.2,0.4,0.6,0.8)
+#          i. Grafica en una sola grafica y con ella decidir cual de los 4 es el que mejor 
+#              ajuste tiene
+#         ii. Una vez que hayan decidido graficarmente el mejor ajuste, aplica la evaluacion de los ajustes
+#            y utiliza las medidas MAE y RMSE extrayendolas de tal forma que creen un vector que comparte 
+#            estas medidas y este vector indique que alpha es la mejor
+#        iii. Identificar tendencia, estacionariedad y ciclos en la ST e interpreta estos componentes
+
+
+require (foreign)
+require(fpp)
+
+NT<-read.csv("https://chart.finance.yahoo.com/table.csv?s=NFLX.MX&a=2&b=21&c=2017&d=3&e=21&f=2017&g=d&ignore=.csv")
+
+NTts<-ts(NT,frequency=254,start=2016)
+
+#  SUAVIZADO: 
+
+mod1<-ses(NTts,alpha=0.2,initial="simple",h=8)
+mod2<-ses(NTts,alpha=0.4,initial="simple",h=8)
+mod3<-ses(NTts,alpha=0.6,initial="simple",h=8)
+mod4<-ses(NTts,alpha=0.8,initial="simple",h=8)
+
+#   GRAFICAMOS :
+colors()[1:10]
+length(colors())                             # -----> Sirven para ver dif. colores que proporciona R
+grep("blue", colors(), value=TRUE)
+
+plot(mod1,ylab="Precio de Cierre",xlab="Periodicidad",main="Netflix, Inc. (NFLX.MX)",type="o",col="indianred3")
+lines(fitted(mod1),type="o", col="royalblue")
+lines(fitted(mod2),col="purple2",type="o")
+lines(fitted(mod3),col="red4",type="o")
+lines(fitted(mod4),col="skyblue1",type="o")
+
+# ------> MODELO 4 : AJUSTA MEJOR
+#--------------------->  MODELO 1:
+aa<- NTts- mod1$fitted
+aa
+# Calcular el MAE : media del error absoluto
+
+# MAE:
+mean(abs(aa))
+# RMSE:
+sqrt(mean(aa)^2) 
+evalm1<- accuracy(mod1)
+evalm1
+
+#--------------------> MODELO 2 :
+bb<- NTts- mod2$fitted 
+bb
+# MAE  :
+mean(abs(bb))
+# RMSE :
+sqrt(mean(bb)^2) 
+evalm2<- accuracy(mod2)
+evalm2
+
+#--------------------> MODELO 3 :
+cc<- NTts- mod3$fitted 
+cc
+# MAE: 
+
+mean(abs(cc)) 
+# RMSE :
+sqrt(mean(cc)^2) 
+evalm3<- accuracy(mod3)
+evalm3
+
+#--------------------> MODELO 4:
+dd<- NTts- mod4$fitted 
+dd
+# MAE: 
+mean(abs(dd)) 
+
+# RMSE :
+sqrt(mean(dd)^2) 
+evalm4<- accuracy(mod4)
+evalm4
+
+names (evalm4)
+
+VMAE1<-c(evalm1[2],evalm2[2],evalm3[2],evalm4[2])
+vectorRMSE1<-c(evalm1[3],evalm2[3],evalm3[3],evalm4[3])
+
+VMAE<-t(vectorMAE1)
+VMAE
+VRMSE<-t(vectorRMSE1)
+
+minMAE<-min(vectorMAE)
+minRMSE<-min(vectorRMSE)
+
+
+
+mae<-ifelse(vectorMAE[,1]== minMAE,  "el mejor es modelo 1", 
+            ifelse(vectorMAE[,2]==minMAE, "el mejor es modelo 2",
+                   ifelse(vectorMAE[,3]==minMAE, "el mejor es modelo 3",
+                          ifelse(vectorMAE[,4]==minMAE, "el mejor es modelo 4",0))))
+mae
+
+RMSe<-ifelse(vectorRMSE[,1]== minRMSE,  "el mejor es modelo 1", 
+             ifelse(vectorRMSE[,2]==minRMSE, "el mejor es modelo 2",
+                    ifelse(vectorRMSE[,3]==minRMSE, "el mejor es modelo 3",
+                           ifelse(vectorRMSE[,4]==minRMSE, "el mejor es modelo 4",0))))
+RMSe
