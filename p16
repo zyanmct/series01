@@ -1,0 +1,99 @@
+#--------------------------------> SERIES DE TIEMPO  <-------------------------------------------------
+# Date : 19 abril 2017
+
+
+install.packages("foreign")
+require (foreign)
+require(fpp)
+# ------------>  NETFLIX BASE del 20 de abril 2016 al 20 de abril 2017 semanal. Fuente: YahooFinanzas
+
+net<-read.csv("https://chart.finance.yahoo.com/table.csv?s=NFLX.MX&a=3&b=20&c=2016&d=3&e=20&f=2017&g=w&ignore=.csv")
+View(net)
+netflix<-ts(net[,6],frequency=254,start=2016)
+
+mod1<-ses(netflix,alpha=0.2,initial="simple",h=8)
+mod2<-ses (netflix,alpha=0.4,initial="simple",h=8)
+mod3<-ses(netflix,alpha=0.6,initial="simple",h=8)
+mod4<-ses(netflix,alpha=0.8,initial="simple",h=8)
+
+#-----------------------------------------------------------------------------------------------------
+#---------------------------->    ANALISIS DE RESIDUALES  <-------------------------------------------
+#       Lo que se va analizar de los residuales es que cumplan con las propiedades de residuales que 
+#      consisten en:
+#       i. Los residuales no estan correlacionados 
+#      ii. Tienen Media cero (0)
+#     iii. Tienen Varianza constante
+#      iv. Los residuales estan distribuidos de forma normal
+
+#     Para esto en Rstudio se tiene que obtener los residuales de cada uno de los 4 modelos, esto con
+#    la finalidad de analizarlos y conocer su comportamiento.
+#    Para lo anterior vamos a graficar nuestros datos con los valores ajustados para despues extraer
+#    los residuales de c/u de los modelos y comenzar los analisis correspondientes.
+
+colors()[1:10]
+length(colors())                             # -----> Sirven para ver dif. colores que proporciona R
+grep("red", colors(), value=TRUE)
+
+x11()
+plot(mod1,ylab="Precio Cierre",xlab="Dias", main="Netflix, Inc. (NFLX.MX)",type="l",col="darkred")
+lines(mod1$fitted,col="orangered",type="s")
+lines(mod2$fitted,col="red4",type="o")
+lines(mod3$fitted,col="palevioletred",type="o")
+lines(mod4$fitted,col="indianred1",type="o")
+
+res1<-residuals(mod1)
+res2<-residuals(mod2)
+res3<-residuals(mod3)
+res4<-residuals(mod4)
+
+plot(res1,ylab="residuales",xlab="")
+plot(res2,ylab="residuales",xlab="")
+plot(res3,ylab="residuales",xlab="")
+plot(res4,ylab="residuales",xlab="")
+# ------------------------------> REALIZAMOS HISTOGRAMAS <----------------------------------------
+#    -------->   "nclass": numero de grupos que debes autodetermianr cuando haces un histograma
+#    -------->   "FD": Garantizar media cero (0)
+
+hist(res1,nclass="FD",main="histograma residuales") 
+hist(res2,nclass="FD",main="histograma residuales") 
+hist(res3,nclass="FD",main="histograma residuales") 
+hist(res4,nclass="FD",main="histograma residuales") 
+# ------------------> PRUEBA DE AUTOCORRELACIONES A LOS RESIDUALES <----------------------------
+
+#       Para analizar las autocorrelaciones, hemos visto que utilizamos la funcion "acf" en el cual
+#      nos muestra un correlograma que nos permite mostrar la relacion que existe entre los datos
+#      ademas de esta prueba que es grafica.
+#      Se utiliza la prueba de "ljung Box" , la cual funciona con "Box.test", que permite conocer 
+#      la correalcion que existe entre los residuales a travez de una prueba de hipotesis.
+
+# ------>  Obtenemos el correlograma de residuales analizados :
+
+acf(res1,main="res1")
+acf(res2,main="res2")
+acf(res3,main="res3")
+acf(res4,main="res4")
+
+#   Para poder comprobar la correlacion de los residuales utulizamos una prueba llamada "ljung box", 
+#   esta nos permite sabes con mayor certeza si existe correlacion o no en los residuales 
+
+
+Box.test(res1,lag=10,type="Lj") 
+Box.test(res2,lag=10,type="Lj")
+Box.test(res3,lag=10,type="Lj")
+Box.test(res4,lag=10,type="Lj")
+# NOTA  lag: cuando desfase tendra la prueba
+#       type: tipo el ljuj     
+
+# El estadistico Q de ljung box prueba la hipotesis nula de que las autocorrelaciones de hasta un desfase
+# K son iguales a cero, ie, los valores de los datos son aleatorios e independientes hasta un cierto numero
+# de desfases.
+
+# Si el LQB es > que un valor critico especficado, las autocorrelaciones para uno o mas desfases podrian 
+# ser estadisticamente significativas diferentes a cero, lo que indicaria que los valores no son aleatorios
+# ni independientes.
+
+#---------------------- > ETAPAS DE UN ANALISIS DE RESIDUALES <------------------------
+#      i. Elegir el modelo a traves de las medidas MAE Y RMSE
+#     ii. Realizar pruebas a los residuales de normalidad, independencia y varianza
+#   Constante una vez que las pruebas son variables, ya se puede elegir el modelo como una opcion 
+#   a considerar para realizar los pronosticos necesarios
