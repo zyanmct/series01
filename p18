@@ -1,0 +1,26 @@
+#------------------------------------------------------------------------------
+# ------------------------>  Series de Tiempo <--------------------------------
+
+# Generar una ST estacional 
+# Pronosticar en los dos metodos de Holt-Winter y ademas aplicar el pronostico 
+# De tendencia exponencial y grafiquen para comparar
+require(fpp)
+gold<-read.csv("http://chart.finance.yahoo.com/table.csv?s=GOLD&a=3&b=24&c=2016&d=3&e=24&f=2017&g=d&ignore=.csv")
+gold
+goldt<-ts(gold,start = 2016,frequency = 254)
+View(goldts)
+goldts
+plot(gold)
+
+corte1<-window(goldts,start =2016,end=2017,frequency=4)
+corte2<-window(goldts,start=2017,end=2018,frequency=4)
+
+mod1<-holt(goldts,alpha=.8,beta=.2,initial="simple", exponencial=T, h=5)
+mod2<-hw(goldts,seasonal="additive")
+mod3<-hw(goldts,seasonal="multiplicative")
+
+plot(mod1,ylab="Precio",xlab="Periodo", main= "Randgold Resources Limited (GOLD)",col="palegreen3", type="o")
+
+lines(fitted(mod1),col="cadetblue1",type="o")
+lines(fitted(mod2),col="royalblue",type="o")
+lines(fitted(mod3),col="slateblue4",type="o")
