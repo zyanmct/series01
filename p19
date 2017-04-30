@@ -1,0 +1,171 @@
+require (forecast)
+install.packages(foreign)
+require (foreign)
+require(fpp)
+
+dol<- read.csv("C://Users//Sala-D15//Documents//D.csv")
+dolar<-ts(dol,frequency=252,start=2016)
+
+IC<- read.csv("C://Users//Sala-D15//Documents//ICA1.csv")
+ICA<-ts(IC,frequency=252,start=2016)
+
+pib<- read.csv("C://Users//Sala-D15//Documents//PIB1.csv")
+PIB<-ts(pib,frequency=1,start=2000)
+
+bim<- read.csv("C://Users//Sala-D15//Documents//BIMBO1.csv")
+BIMBO<-ts(bim,frequency=252,start=2016)
+
+plot(dolar)
+plot(ICA)
+plot(PIB)
+plot(BIMBO)
+
+### ajuste fitted
+##metodos simple pib (ajustando datos generAR MISMOS VALoRES DE MIS DATOS PERO CON EL MODELO)
+ingpib<-naive(PIB,h=5)
+prompib<-meanf(PIB,h=5) 
+estapib<-snaive(PIB,h=5)
+rwfpib<-rwf(PIB,h=5,drift=TRUE)
+
+plot(PIB,col="red")
+lines(ingpib$fitted,col="blue")
+lines(prompib$fitted,col="yellow")
+lines(estapib$fitted,col="brown")
+lines(rwfpib$fitted,col="purple")
+
+###metodos hotl
+hotsimplep<-holt(PIB,alpha=.8,beta=.2, initial="simple",h=5)
+holtexponencialp<-holt(PIB,alpha=.8,beta=.2, initial="simple",exponential=TRUE,h=5)
+
+plot(PIB,col="red")
+lines(hotsimplep$fitted,col="blue")
+lines(holtexponencialp$fitted,col="yellow")
+
+###metodos hotl amortiguado
+holtaditivop<-holt(PIB,damped=TRUE)
+hotltmultip<-holt(PIB,exponential=T,damped=T)
+
+plot(PIB,col="red")
+lines(holtaditivop$fitted,col="blue")
+lines(hotltmultip$fitted,col="yellow")
+
+###metodos winter (no se puede porque no son series estacionales)
+win1p<-hw(PIB,seasonal="additive",h=5)
+win2p<-hw(PIB,seasonal="multiplicative",h=5)
+
+plot(PIB,col="red")
+lines(win1p$fitted,col="blue")
+lines(win2p$fitted,col="yellow")
+
+
+## metodos simple dolar
+ingdol<-naive(dolar,h=5)
+promdol<-meanf(dolar,h=5) 
+estadol<-snaive(dolar,h=5)
+rwfdol<-rwf(dolar,h=5,drift=TRUE)
+
+plot(dolar,col="red")
+lines(ingdol$fitted,col="blue")
+lines(promdol$fitted,col="yellow")
+lines(estadol$fitted,col="brown")
+lines(rwfdol$fitted,col="purple")
+
+###metodos hotl
+hotsimpled<-holt(dolar,alpha=.8,beta=.2, initial="simple",h=5)
+holtexponenciald<-holt(dolar,alpha=.8,beta=.2, initial="simple",exponential=TRUE,h=5)
+
+plot(dolar,col="red")
+lines(hotsimpled$fitted,col="blue")
+lines(holtexponenciald$fitted,col="yellow")
+
+###metodos hotl amortiguado
+holtaditivod<-holt(dolar,damped=TRUE)
+hotltmultid<-holt(dolar,exponential=T,damped=T)
+
+plot(dolar,col="red")
+lines(holtaditivod$fitted,col="blue")
+lines(hotltmultid$fitted,col="yellow")
+
+###metodos winter (no se puede porque no son series estacionales)
+win1d<-hw(dolar,seasonal="additive",h=5)
+win2d<-hw(dolar,seasonal="multiplicative",h=5)
+
+plot(dolar,col="red")
+lines(win1d$fitted,col="blue")
+lines(win2d$fitted,col="yellow")
+
+## metodos simple ICA
+ingic<-naive(ICA,h=5)
+promic<-meanf(ICA,h=5) 
+estaic<-snaive(ICA,h=5)
+rwfic<-rwf(ICA,h=5,drift=TRUE)
+
+plot(ICA,col="red")
+lines(ingic$fitted,col="blue")
+lines(promic$fitted,col="yellow")
+lines(estaic$fitted,col="brown")
+lines(rwfdol$fitted,col="purple")
+
+###metodos hotl
+hotsimpleI<-holt(ICA,alpha=.8,beta=.2, initial="simple",h=5)
+holtexponencialI<-holt(ICA,alpha=.8,beta=.2, initial="simple",exponential=TRUE,h=5)
+
+plot(ICA,col="red")
+lines(hotsimpleI$fitted,col="blue")
+lines(holtexponencialI$fitted,col="yellow")
+
+###metodos hotl amortiguado
+holtaditivoI<-holt(ICA,damped=TRUE)
+hotltmultiI<-holt(ICA,exponential=T,damped=T)
+
+plot(ICA,col="red")
+lines(holtaditivoI$fitted,col="blue")
+lines(hotltmultiI$fitted,col="yellow")
+
+###metodos winter (no se puede porque no son series estacionales)
+win1I<-hw(ICA,seasonal="additive",h=5)
+win2I<-hw(ICA,seasonal="multiplicative",h=5)
+
+plot(ICA,col="red")
+lines(win1I$fitted,col="blue")
+lines(win2I$fitted,col="yellow")
+
+## metodos simple BIMBO
+ingBI<-naive(BIMBO,h=5)
+promBI<-meanf(BIMBO,h=5) 
+estaBI<-snaive(BIMBO,h=5)
+rwfBI<-rwf(BIMBO,h=5,drift=TRUE)
+
+plot(BIMBO,col="red")
+lines(ingBI$fitted,col="blue")
+lines(promBI$fitted,col="yellow")
+lines(estaBI$fitted,col="brown")
+lines(rwfBI$fitted,col="purple")
+
+
+###metodos hotl
+hotsimpleB<-holt(BIMBO,alpha=.8,beta=.2, initial="simple",h=5)
+holtexponencialB<-holt(BIMBO,alpha=.8,beta=.2, initial="simple",exponential=TRUE,h=5)
+
+plot(BIMBO,col="red")
+lines(hotsimpleB$fitted,col="blue")
+lines(holtexponencialB$fitted,col="yellow")
+
+###metodos hotl amortiguado
+holtaditivoB<-holt(BIMBO,damped=TRUE)
+hotltmultiB<-holt(BIMBO,exponential=T,damped=T)
+
+plot(BIMBO,col="red")
+lines(holtaditivoB$fitted,col="blue")
+lines(hotltmultiB$fitted,col="yellow")
+
+###metodos winter (no se puede porque no son series estacionales)
+win1B<-hw(BIMBO,seasonal="additive",h=5)
+win2B<-hw(BIMBO,seasonal="multiplicative",h=5)
+
+plot(BIMBO,col="red")
+lines(win1B$fitted,col="blue")
+lines(win2B$fitted,col="yellow")
+
+###mean es el pronostico es lo que grafico despues de elgir el modelo 
+##MEAN ES EL PRONOSTICO
