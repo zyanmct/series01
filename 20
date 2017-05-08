@@ -1,0 +1,11 @@
+#                            SERIES DE TIEMPO
+# DATE : 8 Mayo 2017
+
+ica<-read.csv("/Users/zyanmctz/Downloads/ICA.MX-2.csv")
+View(ica)
+ica<-ica[,6]
+ica<-ts(ica,frequency = 252,start = 2016)
+acf(ica)
+plot(ica)
+
+
