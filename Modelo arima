@@ -1,0 +1,87 @@
+# SERIES DE TIEMPO
+# 22.05.2017
+
+#Usamos las bases de datos de bimbo y cemex
+# arima (p,1,q)
+require(foreign)
+require(fpp)
+
+BIMBO<-read.csv("C:\\Users\\Sala-D16\\Desktop\\bimbo.csv")
+View(BIMBO)
+CEMEX<-read.csv("C:\\Users\\Sala-D16\\Desktop\\CEMEXCPO.MX.csv")
+
+bimbo<-ts(BIMBO[,5],frequency = 252,start = 2016)
+# Revisar si nuestra base es estacionaria 
+#   Se aplica la prueba de raiz unitaria a traves de la funcion 
+#    adf.test y esperamos que el p-value sea menor a .05
+adf.test(bimbo)
+dbimts<-diff(bimbo)      #aplicamos la primera diferenciacion con la funcion diff
+# DEBIDO A que la serie original no es estacionaria
+adf.test(bimbo)
+
+#aplicamos dos correlogramas 
+acf(dbimts)  # aqui aplicamos el numero de de q que se asocia con los numeros del promedio movil
+# numero de lienas que sobre pasan es la q
+# para determinar el valor de p que se relaciona con los modelos 
+# autoregresivos se utiliza la funcion pacf()
+pacf(dbimts)
+# segun el correlograma de pacf el valor de p es 1
+# por lo que se propone un modelo arima (1,1,2)
+
+modbim<-Arima(bimbo,order=c(1,1,2))
+modbim
+# el que tenga menor valor de acc es el mejor modelo 
+# promedios moviles=ma1 y ma2 ar=auto regresivo 
+
+modbim1<-Arima(bimbo,order=c(2,1,2))
+modbim1
+# Entre estos dos modelos habria que revisar el valor de aicc y el menor valor
+# de aicc seria eñ mejpor modelo con el criterio AIKAIKE
+modres<-residuals(modbim)
+Box.test(modres,lag=12,type="Ljung-Box") #  p value grande sugiere residuales ruido blanco
+#reSIDUALES DE RUIDO BLANCO
+
+mod1<-forecast(modbim,h=12)
+plot(forecast(modbim,h=12),include=18) # da los ultimos 18 datos. para dar idea de como se comporta la st
+
+mod1
+summary(mod1)
+
+# AHORA LA FUNCION AUTOARIMA 
+
+
+auto.arima(bimbo)
+modbim1<-Arima(bimbo,order=c(2,1,2))
+modres1<-residuals(modbim1)
+Box.test(modres1,lag=12,type="Ljung-Box")
+mod11<-forecast(modbim1,h=12)
+plot(forecast(modbim1,h=12),include=25)
+
+
+
+#########################################################################################################
+#                           ahora para CEMEX
+
+CEMEX<-read.csv("C:\\Users\\Sala-D16\\Desktop\\CEMEXCPO.MX.csv")
+View(CEMEX)
+cemex<-ts(CEMEX[,5],frequency = 252,start = 2016)
+
+adf.test(cemex)
+dbimts<-diff(cemex)
+adf.test(cemex)
+acf(dbimts) 
+pacf(dbimts)
+modbim<-Arima(cemex,order=c(1,1,2))
+modbim
+modbim1<-Arima(bimbo,order=c(2,1,2))
+modbim1
+
+modres<-residuals(modbim)
+Box.test(modres,lag=12,type="Ljung-Box") #  p value grande sugiere residuales ruido blanco
+#reSIDUALES DE RUIDO BLANCO
+
+mod1<-forecast(modbim,h=12)
+plot(forecast(modbim,h=12),include=18) # da los ultimos 18 datos. para dar idea de como se comporta la st
+
+mod1
+summary(mod1)
