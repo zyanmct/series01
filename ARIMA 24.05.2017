@@ -1,0 +1,76 @@
+# SERIES DE TIEMPO
+# 24.05.2017
+
+require(forecast)
+require(fpp)
+amx<-read.csv("C:\\Users\\Sala-D16\\Downloads\\AMX.csv")
+View(amx)
+amx<-amx[,5]
+
+ccl<-ts(amx,frequency = 252,start = 2016)
+zz<-Arima(ccl,order = c(1,0,0))
+# Recordar las entradas 
+zz
+
+#yt = c + fi1(Yt-1) +fi2(Yt-2)+...+fip(Yt-p)
+#ar1 0.9864 coeficiente del modelo autoregresivo 1
+# Para este caso
+# yt= 12.34 interpcepto = c
+# 0.9864(Yt-1)
+#s.e. error estandar
+# Si tuvieramos un modelo autoregresivo de orden 2 se expresa como modelo arima
+# de la siguiente manera
+
+zz2<-Arima(amx,order = c(2,0,0))
+zz2
+# En este modelo AR(1) se plantea de la siguiente manera 
+#yt=13.2634 + 1.0601(Yt-1)- 0.0755(Yt-2) + etc... en este caso fi1=1.0601 y
+# fi2=-0.0755
+
+#Para un modelo AARIMA se expresa de esta forma como lo podamos representar 
+#Caso MA(1)
+yy<-arima(amx,order = c(0,0,1))
+yy
+#Expresado como: yt=c+teta1(Yt-1) + teta2(Yt-1)+...+tetap(Yt-p)
+# yt=12.7409 + 0.8605(Yt-1) +...
+
+#---------------------> Para un modleo de promedios moviles de orden 2 se 
+#  expresa un modelo arima como :
+
+yy2<-Arima(amx,order = c(0,0,2))
+yy2
+# En este caso se tiene un modelo MA(2)
+#Para el modelo planteado se expresa
+# yt= 12.7481 + 1.339(et-1) + .7423(et-2)
+#c =12.7481 ; teta1= 1.339, teta2=0.7423
+
+# ----> MODELO ARIMA (con diferenciacion)
+
+#y´t<-x+fi1(Y´t-1)+...+fip(Y´t-p)+ teta(et-1)+ teta2(et-2)+...+tetap(et-q)+et
+
+#Para un modelo arima con p=2 d=3 q=2 EXPRESA :
+
+yy3<-Arima(amx,order = c(2,3,2))
+yy3
+
+#Con este modelo expresamos 
+# y´´´t<-0.0716 - 0.1527(Y´´´t-2)- 1.9987(Y´´´t-1)+1.9998(et-2)
+
+# TRABAJO EN CLASE :
+# ACCIONES DE IXE
+
+ixe<-read.csv("C:\\Users\\Sala-D16\\Desktop\\IXE.csv")
+View(ixe)
+ixe<-ixe[,5]
+
+ixets<-ts(ixe,frequency = 252,start = 2016)
+#Arima
+arm<-Arima(ccl,order = c(0,3,2))
+arm
+#Ecuacion
+#yt = -1.9986 + fi1(et-1) +fi2(et-2)+...+fip(et-p)
+#ma1=et -1.9986 y ma2=0.9996 
+
+
+
+
